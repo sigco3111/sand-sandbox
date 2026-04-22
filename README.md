@@ -6,7 +6,7 @@
 
 모래, 물, 불, 용암, 화약 등 **18종 요소**가 중력과 화학 반응으로 실시간 상호작용하는 인터랙티브 시뮬레이션
 
-[**▶ 라이브 데모 바로가기**](https://sand-sandbox-sigco3111s-projects.vercel.app) · [GitHub](https://github.com/sigco3111/sand-sandbox)
+[**▶ 라이브 데모 바로가기**](https://sand-sandbox.vercel.app) · [GitHub](https://github.com/sigco3111/sand-sandbox)
 
 </div>
 
@@ -193,7 +193,7 @@ npm run test:watch     # 워치 모드
 
 ## 🌐 배포
 
-[Vercel](https://vercel.com)에 배포됨 — [sand-sandbox-sigco3111s-projects.vercel.app](https://sand-sandbox-sigco3111s-projects.vercel.app)
+[Vercel](https://vercel.com)에 배포됨 — [sand-sandbox.vercel.app](https://sand-sandbox.vercel.app)
 
 ## 📄 라이선스
 
