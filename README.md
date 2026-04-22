@@ -1,6 +1,6 @@
 # 🏜️ Sand Sandbox — Falling Sand Simulation
 
-> 모래, 물, 불, 식물 등 요소 간 화학 반응이 일어나는 인터랙티브 샌드박스 시뮬레이션
+> 모래, 물, 불, 식물 등 18종 요소 간 화학 반응이 일어나는 인터랙티브 샌드박스 시뮬레이션
 
 ## 📋 프로젝트 개요
 
@@ -10,166 +10,164 @@
 
 | 항목 | 기술 |
 |------|------|
-| 프레임워크 | Next.js 14 (App Router) |
+| 프레임워크 | Next.js 16 (App Router) |
 | 언어 | TypeScript |
-| 렌더링 | HTML5 Canvas |
-| 스타일 | Tailwind CSS |
-| 배포 | Vercel (무료) |
+| 렌더링 | HTML5 Canvas (ImageData 픽셀 단위) |
+| 테스트 | Vitest (122개 테스트) |
+| 스타일 | 인라인 스타일 (다크 테마 + 글라스모피즘) |
 
 > **외부 API 없음, 외부 파일 없음, 비용 0**
 
-## 🧪 구현해야 할 요소 (Elements)
+## 🧪 구현된 요소 (18종)
 
-### Phase 1: 기본 요소 (MVP)
+### Powder (분말)
 
 | 요소 | 동작 | 색상 |
 |------|------|------|
-| **Sand** (모래) | 중력으로 떨어짐, 쌓임, 사선으로 미끄러짐 | `#D4A574` (베이지 계열, 랜덤 변형) |
-| **Water** (물) | 중력으로 떨어짐, 좌우로 퍼짐, 증발점 100°C | `#4A90D9` (파란 계열, 랜덤 변형) |
-| **Stone** (돌) | 고정, 모래/물이 위로 흘러감 | `#808080` (회색 계열) |
-| **Wall** (벽) | 완전 고정, 모든 요소 차단 | `#3D3D3D` (진회색) |
+| **Sand** (모래) | 중력으로 떨어짐, 쌓임, 사선으로 미끄러짐 | `#D4A574` |
+| **Gunpowder** (화약) | 모래처럼 떨어짐, 불/스파크 → 폭발 (반경 3셀) | `#444444` |
 
-### Phase 2: 화학 반응 요소
+### Liquid (액체)
 
-| 요소 | 동작 | 반응 |
+| 요소 | 동작 | 색상 |
 |------|------|------|
-| **Fire** (불) | 위로 올라감, 수명 제한 (~30프레임) | 물과 만나면 → 증기. 나무/식물/오일에 닿으면 → 불번짐 |
-| **Steam** (증기) | 위로 올라감, 랜덤 좌우 이동, 응축 후 물로 변환 | — |
-| **Oil** (오일) | 물보다 가벼워 물 위에 뜸 | 불과 만나면 → 불번짐 |
-| **Lava** (용암) | 물처럼 느리게 흐름 | 물과 만나면 → 돌 + 증기. 나무와 만나면 → 불 + 돌 |
+| **Water** (물) | 중력 + 좌우 확산, 100°C에서 증발 | `#4A90D9` |
+| **Oil** (오일) | 물보다 가벼워 물 위에 뜸, 불 → 번짐 | `#8B6914` |
+| **Acid** (산) | 중력으로 흐름, 닿는 모든 것 녹임 (돌/벽 제외) | `#7FFF00` |
+| **Lava** (용암) | 느리게 흐름 (50% 확률 스킵), 물 → 돌+증기 | `#FF2200` |
 
-### Phase 3: 생물 요소
+### Gas (가스)
 
-| 요소 | 동작 | 반응 |
+| 요소 | 동작 | 색상 |
 |------|------|------|
-| **Wood** (나무) | 고정 | 불과 만나면 → 불 |
-| **Plant** (식물) | 고정, 물을 흡수하면 자라나고 위로 확장 | 물 주변에서 성장, 불과 만나면 → 불 |
-| **Acid** (산) | 중력으로 흐름, 닿는 모든 것을 녹임 (돌/벽 제외) | — |
-| **Gunpowder** (화약) | 모래처럼 떨어짐 | 불/스파크와 만나면 → 폭발 (주변 요소 전부 날림) |
+| **Fire** (불) | 위로 올라감, 수명 제한 (~30프레임), 나무/식물/오일에 번짐 | `#FF4500` |
+| **Smoke** (연기) | 위로 올라감, 서서히 사라짐 | `#696969` |
+| **Spark** (불꽃) | 빠르게 이동, 짧은 수명, 화약 → 폭발 | `#FFD700` |
 
-### Phase 4: 고급 요소 (선택)
+### Solid (고체)
 
-| 요소 | 동작 | 반응 |
+| 요소 | 동작 | 색상 |
 |------|------|------|
-| **Ice** (얼음) | 고정 | 주변 온도가 높으면 → 물 |
-| **Smoke** (연기) | 위로 올라감, 서서히 사라짐 | — |
-| **Spark** (불꽃) | 빠르게 이동, 짧은 수명 | 화약과 만나면 → 폭발 |
-| **Clone** (복제기) | 닿는 요소를 복제하여 위로 방출 | — |
-| **Erase** (지우개) | 도구. 닿는 요소를 삭제 | — |
+| **Stone** (돌) | 고정, 산에 녹지 않음 | `#808080` |
+| **Wall** (벽) | 완전 고정, 모든 요소 차단 | `#555555` |
+| **Wood** (나무) | 고정, 불/용암에 타거나 돌로 변함 | `#8B6914` |
+| **Plant** (식물) | 고정, 물 옆에서 3% 확률 성장 | `#228B22` |
+| **Ice** (얼음) | 고정, 온도 > 0°C → 물 | `#ADD8E6` |
+| **Clone** (복제기) | 닿은 요소 기억, 5프레임마다 위로 방출 | `#9370DB` |
 
-## 🔬 상호작용 규칙 (Interaction Rules)
+### Tool (도구)
+
+| 요소 | 동작 | 색상 |
+|------|------|------|
+| **Erase** (지우개) | 드래그한 영역의 요소를 삭제 | `#FF4444` |
+
+## 🔬 화학 반응 규칙
 
 ```
-Water + Fire    → Steam
-Water + Lava    → Stone + Steam
-Fire  + Wood    → Fire (번짐)
-Fire  + Plant   → Fire (번짐)
-Fire  + Oil     → Fire (번짐)
+Water + Fire      → Steam + Smoke
+Water + Lava      → Stone + Steam
+Fire  + Wood      → Fire (번짐)
+Fire  + Plant     → Fire (번짐)
+Fire  + Oil       → Fire (번짐)
 Fire  + Gunpowder → Explosion (반경 3셀)
 Spark + Gunpowder → Explosion
-Plant + Water   → Plant (성장)
-Acid  + (모든것) → Acid + (대상 삭제, 돌/벽 제외)
-Lava  + Wood    → Fire + Stone
-Oil   + Water   → Oil이 위에 뜸 (밀도 기반 정렬)
-Ice   + (높은온도) → Water
+Lava  + Wood      → Stone + Fire
+Acid  + (대부분)  → Acid + (대상 삭제, 돌/벽 제외)
+Plant + Water     → Plant 성장 (3% 확률)
+Ice   + (온도>0°C)→ Water
+Water + (온도>100°C)→ Steam
 ```
 
 ## 🖱️ 사용자 인터랙션
 
 ### 마우스
-- **좌클릭 + 드래그**: 현재 선택된 요소를 그리기
+- **좌클릭 + 드래그**: 현재 선택된 요소 그리기
 - **우클릭 + 드래그**: 요소 삭제 (지우개 모드)
-- **스크롤**: 브러시 크기 조절 (1~20px)
+- **스크롤**: 브러시 크기 조절 (1~20)
+
+### 터치 (모바일)
+- **터치 + 드래그**: 요소 그리기
+- **핀치 줌**: 브러시 크기 조절
 
 ### 키보드
-- `1~9`, `0`: 요소 빠른 선택
+- `1~9`, `0`: Powder/Liquid/Solid 빠른 선택
+- `q` `w` `e` `r` `t`: Gunpowder, Ice, Smoke, Spark, Clone
+- `x`: Erase 선택
 - `Space`: 일시정지/재생
 - `C`: 화면 전체 클리어
 - `[` / `]`: 시뮬레이션 속도 조절 (0.5x ~ 3x)
 
 ### 툴바 UI
-- 요소 선택 팔레트 (아이콘 + 이름)
-- 현재 브러시 크기 표시
-- 시뮬레이션 속도 표시
-- FPS 표시
-- 클리어 버튼
-- 일시정지/재생 버튼
+- 요소 카테고리별 분류 (Powder / Liquid / Gas / Solid / Tool)
+- 배경색 선택 (7종 프리셋)
+- 브러시 크기 ±버튼
+- 클리어 / 일시정지 버튼
+- HUD (FPS, 활성 셀 수, 속도, 브러시, 선택 요소)
 
-## 🏗️ 구조 설계
-
-### 샌드박스 엔진 (`src/lib/engine/`)
+## 🏗️ 프로젝트 구조
 
 ```
-engine/
-├── grid.ts          # 그리드 데이터 구조 (Uint8Array 기반, 메모리 최적화)
-├── types.ts         # ElementType enum, Cell 인터페이스
-├── physics.ts       # 물리 엔진 (중력, 흐름, 확산)
-├── reactions.ts     # 화학 반응 규칙
-├── temperature.ts   # 온도 시스템 (선택, Phase 4 이후)
-└── simulator.ts     # 메인 시뮬레이션 루프
+src/
+├── lib/
+│   ├── engine/                    # 순수 TypeScript 엔진 (React 무의존)
+│   │   ├── types.ts               # ElementType enum (18종), 카테고리 분류, DENSITY_MAP
+│   │   ├── grid.ts                # SoA 그리드 (Uint8Array/Float32Array)
+│   │   ├── random.ts              # mulberry32 PRNG
+│   │   ├── lifetime.ts            # 수명/소멸 시스템
+│   │   ├── temperature.ts         # 온도 전파 + 상변화 (Ice→Water→Steam)
+│   │   ├── physics.ts             # 물리 엔진 오케스트레이터
+│   │   ├── physics-powder.ts      # 분말 물리 (Sand, Gunpowder)
+│   │   ├── physics-liquid.ts      # 액체 물리 (Water, Oil, Acid, Lava)
+│   │   ├── physics-gas.ts         # 가스 물리 (Fire, Steam, Smoke, Spark)
+│   │   ├── physics-special.ts     # 특수 물리 (Plant 성장, Clone 복제)
+│   │   ├── physics-utils.ts       # 물리 공용 유틸 (swap, tryMove 등)
+│   │   ├── reactions.ts           # 화학 반응 규칙 + 폭발
+│   │   ├── simulator.ts           # 메인 시뮬레이터 (step/pause/resume/setSpeed)
+│   │   └── __tests__/             # 122개 테스트 (11개 파일)
+│   └── renderer/
+│       ├── colors.ts              # COLOR_MAP + ±10 랜덤 색상 변형
+│       └── canvas.ts              # ImageData 렌더링 (배경색 선택 지원)
+├── components/
+│   ├── SandSimApp.tsx             # 상태 관리 (선택 요소, 브러시, 속도, 배경색)
+│   ├── SimulationCanvas.tsx       # Canvas + 키보드 통합
+│   ├── Toolbar.tsx                # 카테고리별 요소 팔레트 + 컨트롤
+│   └── HUD.tsx                    # FPS/셀/속도/요소 오버레이
+├── hooks/
+│   ├── useCanvasRenderer.ts       # rAF 루프 + 엔진 초기화
+│   ├── useCanvasInput.ts          # 마우스/터치 입력 + 선형 보간 그리기
+│   └── useKeyboard.ts             # 키보드 단축키
+└── app/
+    └── page.tsx                   # Next.js 페이지 (SSR 비활성화)
 ```
 
-### 렌더러 (`src/lib/renderer/`)
+## ⚡ 성능
 
-```
-renderer/
-├── canvas.ts        # Canvas 렌더링 (ImageData 기반 픽셀 단위)
-├── colors.ts        # 요소별 색상 맵 (랜덤 변형 포함)
-└── camera.ts        # 줌/팬 (선택)
-```
+- **그리드**: 200×150 (셀 크기 4px, 캔버스 800×600)
+- **렌더링**: ImageData 직접 조작 (DOM 없이 픽셀 단위)
+- **엔진**: 순수 함수 + 클로저 (클래스 없음), SoA 데이터 구조
+- **스캔**: 하단→상단 (중력 자연스럽게), processed 플래그로 중복 방지
 
-### 컴포넌트 (`src/components/`)
+## 🎨 디자인
 
-```
-components/
-├── Canvas.tsx       # 메인 시뮬레이션 캔버스
-├── Toolbar.tsx      # 요소 선택 + 브러시/속도 컨트롤
-├── ElementPalette.tsx # 요소 아이콘 그리드
-└── HUD.tsx          # FPS, 셀 수, 시뮬레이션 상태
-```
+- **다크 테마** (`#0a0a14`) + 글라스모피즘 (backdrop-filter blur)
+- **카테고리별 색상 코드**: Powder(베이지), Liquid(파랑), Gas(주황), Solid(회색), Tool(빨강)
+- **반응형**: 모바일 터치 지원, 44px 최소 탭 타겟
+- **배경색**: 7종 프리셋 (Navy, Black, Gray, Blue, Green, Purple, White)
 
-## ⚡ 성능 요구사항
-
-- **그리드 크기**: 기본 200×150 (셀 크기 4px, 캔버스 800×600)
-- **목표 FPS**: 60fps (requestAnimationFrame)
-- **렌더링**: `ImageData` 직접 조작 (DOM 없이 픽셀 단위)
-- **업데이트**: 그리드 스캔은 하단→상단, 좌→우 순서 (중력 자연스럽게)
-- **최적화**: 타일당 1바이트(ElementType), 색상은 렌더 타임에 룩업
-
-## 🎨 디자인 가이드
-
-- **배경**: 어두운 테마 (`#1a1a2e` 또는 `#0f0f1a`)
-- **툴바**: 하단 고정, 유리 효과(glassmorphism)
-- **요소 아이콘**: 각 요소의 색상으로 이모지 스타일 아이콘 (또는 CSS로 구현)
-- **폰트**: 기본 시스템 폰트 (로드 지연 방지)
-- **반응형**: 모바일에서도 터치로 요소 그리기 가능
-
-## 📁 프로젝트 초기화
+## 🚀 실행
 
 ```bash
-npx create-next-app@latest . --typescript --tailwind --app --src-dir --no-eslint
 npm install
 npm run dev
 ```
 
-## ✅ MVP 체크리스트 (Phase 1 완성 기준)
+브라우저에서 http://localhost:3000 열기
 
-- [ ] Sand: 중력 + 사면 미끄러짐 + 쌓임
-- [ ] Water: 중력 + 좌우 확산
-- [ ] Stone: 고정
-- [ ] Wall: 고정 (모든 것 차단)
-- [ ] 마우스로 요소 그리기 (좌클릭/우클릭)
-- [ ] 브러시 크기 조절
-- [ ] 툴바 UI (요소 선택)
-- [ ] Space로 일시정지/재생
-- [ ] C로 화면 클리어
-- [ ] 60fps 안정 동작
-
-## 🚀 배포
+## 📦 빌드 & 테스트
 
 ```bash
-npm run build
-vercel --prod
+npm run build      # 프로덕션 빌드
+npx vitest run     # 122개 테스트 실행
 ```
 
 ## 📄 라이선스
