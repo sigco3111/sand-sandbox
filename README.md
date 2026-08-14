@@ -193,7 +193,7 @@ npm run test:watch     # 워치 모드
 
 ## 🌐 배포
 
-[Vercel](https://vercel.com)에 배포됨 — [sigco3111.github.io/sand-sandbox](https://sigco3111.github.io/sand-sandbox)
+[Vercel → GitHub Pages로 이관 (2026-08)](https://sigco3111.github.io/sand-sandbox) — Pages 정적 export (`next build` + `output: 'export'`), Vercel 사용 이력
 
 ## 📄 라이선스
 
